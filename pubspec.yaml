@@ -20,6 +20,7 @@ dependencies:
   json_serializable: ^6.7.1
   google_fonts: ^5.1.0
   keyboard_dismisser: ^3.0.0
+  font_awesome_flutter: ^10.5.0
 
 dev_dependencies:
   flutter_test:

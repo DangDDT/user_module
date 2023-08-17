@@ -13,10 +13,12 @@ class UserModule {
   static Future<void> init({
     bool isShowLog = false,
     required BaseUrlConfig baseUrlConfig,
+    ViewConfig? viewConfig,
   }) async {
     GlobalBinding.setUpLocator(
       isShowLog: isShowLog,
       baseUrlConfig: baseUrlConfig,
+      viewConfig: viewConfig,
     );
   }
 

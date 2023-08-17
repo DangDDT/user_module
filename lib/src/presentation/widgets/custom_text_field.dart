@@ -24,6 +24,8 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final Widget? suffixIcon;
   final TextInputAction? textInputAction;
+  final bool obscureText;
+  final Function(String)? onSubmitted;
 
   const CustomTextField({
     Key? key,
@@ -45,6 +47,8 @@ class CustomTextField extends StatefulWidget {
     this.suffixIcon,
     this.controller,
     this.textInputAction,
+    this.obscureText = false,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
@@ -58,6 +62,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: Column(
         children: [
           TextFormField(
+            onFieldSubmitted: widget.onSubmitted,
+            obscureText: widget.obscureText,
             keyboardType: widget.keyboardType,
             textInputAction: widget.textInputAction,
             onChanged: widget.onChanged,
@@ -73,43 +79,36 @@ class _CustomTextFieldState extends State<CustomTextField> {
             readOnly: widget.readOnly,
             decoration: InputDecoration(
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(6),
                 borderSide: BorderSide(
-                  color: kTheme.colorScheme.primary.withOpacity(0.05),
+                  width: .1,
+                  color: kTheme.colorScheme.primary.withOpacity(0.1),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(6),
                 borderSide: BorderSide(
-                  color: kTheme.colorScheme.primary.withOpacity(0.05),
+                  color: kTheme.colorScheme.primary,
                 ),
               ),
               hintText: widget.isShowHintText ? widget.labelText : null,
               hintStyle: kTheme.textTheme.titleMedium?.copyWith(
-                color: kTheme.colorScheme.onBackground.withOpacity(0.5),
+                color: kTheme.colorScheme.onBackground,
               ),
               labelStyle: kTheme.textTheme.titleMedium?.copyWith(
                 color: kTheme.colorScheme.onBackground.withOpacity(0.5),
               ),
-              // filled: maxLines > 1,
-              // fillColor: kTheme.colorScheme.primary.withOpacity(0.05),
+              filled: true,
+              fillColor: kTheme.colorScheme.primaryContainer.withOpacity(.3),
               isDense: widget.isDense,
               prefixIcon: widget.prefixIcon != null && widget.maxLines == 1
-                  ? Padding(
-                      padding:
-                          widget.paddingIcon ?? const EdgeInsets.only(top: 16),
-                      child: Icon(
-                        widget.prefixIcon,
-                      ),
+                  ? Icon(
+                      widget.prefixIcon,
                     )
                   : null,
               prefixIconConstraints: const BoxConstraints(minWidth: 36),
               suffixIcon: widget.suffixIcon != null && widget.maxLines == 1
-                  ? Padding(
-                      padding:
-                          widget.paddingIcon ?? const EdgeInsets.only(top: 16),
-                      child: widget.suffixIcon,
-                    )
+                  ? widget.suffixIcon
                   : null,
               suffixIconConstraints: const BoxConstraints(minWidth: 36),
               contentPadding: const EdgeInsets.symmetric(

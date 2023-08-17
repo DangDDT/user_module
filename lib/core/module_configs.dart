@@ -1,5 +1,7 @@
 // // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:flutter/material.dart';
+
 import 'user_module.dart';
 
 class ModuleConfig {
@@ -7,12 +9,15 @@ class ModuleConfig {
   ModuleConfig({
     this.isShowLog = false,
     required this.baseUrlConfig,
+    this.viewConfig,
   })  : _userConfig = null,
         _authConfig = null;
 
   final bool isShowLog;
 
   final BaseUrlConfig baseUrlConfig;
+
+  final ViewConfig? viewConfig;
 
   UserConfig? _userConfig;
 
@@ -51,6 +56,22 @@ class BaseUrlConfig {
 
   BaseUrlConfig({
     required this.baseUrl,
+  });
+}
+
+class ViewConfig {
+  final String? imageBackground;
+  final Widget? logo;
+  final String appName;
+  final bool isShowRegisterButton;
+  final bool isShowForgotPasswordButton;
+
+  ViewConfig({
+    this.imageBackground,
+    this.logo,
+    required this.appName,
+    this.isShowRegisterButton = true,
+    this.isShowForgotPasswordButton = true,
   });
 }
 

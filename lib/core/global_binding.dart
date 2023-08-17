@@ -10,11 +10,13 @@ class GlobalBinding {
   static void setUpLocator({
     required bool isShowLog,
     required BaseUrlConfig baseUrlConfig,
+    ViewConfig? viewConfig,
   }) {
     Get.lazyPut<ModuleConfig>(
       () => ModuleConfig(
         isShowLog: isShowLog,
         baseUrlConfig: baseUrlConfig,
+        viewConfig: viewConfig,
       ),
       fenix: true,
       tag: ModuleConfig.tag,
