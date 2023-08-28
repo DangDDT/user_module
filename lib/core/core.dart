@@ -28,4 +28,3 @@ export 'utils/extensions/list_ext.dart';
 export 'utils/extensions/map_ext.dart';
 export 'utils/extensions/num_ext.dart';
 export 'utils/extensions/string_ext.dart';
-export 'utils/helpers/logger.dart';

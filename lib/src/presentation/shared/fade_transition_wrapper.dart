@@ -4,7 +4,7 @@ class FadeTransitionWrapper extends StatefulWidget {
   const FadeTransitionWrapper({
     Key? key,
     required this.child,
-    this.duration = const Duration(milliseconds: 1000),
+    this.duration = const Duration(milliseconds: 610),
   }) : super(key: key);
   final Duration duration;
   final Widget child;
@@ -13,7 +13,8 @@ class FadeTransitionWrapper extends StatefulWidget {
   State<FadeTransitionWrapper> createState() => _FadeTransitionWrapperState();
 }
 
-class _FadeTransitionWrapperState extends State<FadeTransitionWrapper> with SingleTickerProviderStateMixin {
+class _FadeTransitionWrapperState extends State<FadeTransitionWrapper>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: widget.duration,
     vsync: this,

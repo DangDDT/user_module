@@ -12,7 +12,6 @@ class CustomTextField extends StatefulWidget {
   final String? errorText;
   final int? maxLength;
   final TextInputType keyboardType;
-  final int countLength;
   final FloatingLabelBehavior floatingLabelBehavior;
   final EdgeInsets? paddingIcon;
   final bool isDense;
@@ -26,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final bool obscureText;
   final Function(String)? onSubmitted;
+  final Function()? onTap;
 
   const CustomTextField({
     Key? key,
@@ -35,12 +35,11 @@ class CustomTextField extends StatefulWidget {
     this.errorText,
     this.maxLength,
     this.keyboardType = TextInputType.text,
-    this.countLength = 0,
     this.floatingLabelBehavior = FloatingLabelBehavior.auto,
     this.paddingIcon,
     this.isDense = false,
     this.currentValue,
-    this.isShowHintText = false,
+    this.isShowHintText = true,
     this.inputFormatters,
     this.maxLines = 1,
     this.readOnly = false,
@@ -49,6 +48,7 @@ class CustomTextField extends StatefulWidget {
     this.textInputAction,
     this.obscureText = false,
     this.onSubmitted,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -62,11 +62,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: Column(
         children: [
           TextFormField(
+            onTap: widget.onTap,
             onFieldSubmitted: widget.onSubmitted,
             obscureText: widget.obscureText,
             keyboardType: widget.keyboardType,
             textInputAction: widget.textInputAction,
-            onChanged: widget.onChanged,
+            onChanged: (_) {
+              widget.onChanged;
+              setState(() {});
+            },
             maxLength: widget.maxLength,
             maxLines: widget.maxLines,
             controller: widget.controller,
@@ -130,18 +134,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               ),
             ),
-          if (widget.maxLength != null) ...[
-            kGapH8,
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "${widget.countLength}/${widget.maxLength} ký tự",
-                style: kTheme.textTheme.bodyMedium?.copyWith(
-                  color: kTheme.colorScheme.onBackground.withOpacity(0.5),
-                ),
-              ),
-            )
-          ]
         ],
       ),
     );

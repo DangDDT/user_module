@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/core.dart';
@@ -7,10 +8,8 @@ class CircleAvatarWithErrorHandler extends StatefulWidget {
     super.key,
     required this.avatarUrl,
     required this.fullName,
-    this.baseUrl,
     this.radius = 12,
   });
-  final String? baseUrl;
   final String? avatarUrl;
   final String? fullName;
   final double radius;
@@ -28,21 +27,14 @@ class _CircleAvatarWithErrorHandlerState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final backgroundColor = theme.colorScheme.primary.withOpacity(.8);
-    TextStyle? textStyle = kTheme.textTheme.bodyText2?.copyWith(
+    TextStyle? textStyle = kTheme.textTheme.bodyMedium?.copyWith(
       color: backgroundColor.textColor,
     );
-
     return CircleAvatar(
       radius: widget.radius,
       backgroundColor: backgroundColor,
       backgroundImage: widget.avatarUrl != null
-          ? Image.network(
-              '${widget.baseUrl ?? ''}/${widget.avatarUrl}',
-              errorBuilder: (context, error, stackTrace) =>
-                  const SizedBox.shrink(),
-              height: widget.radius,
-              width: widget.radius,
-            ).image
+          ? BaseExtendedImageNetwork(imageUrl: widget.avatarUrl!).image
           : null,
       onBackgroundImageError: widget.avatarUrl != null
           ? (exception, stackTrace) {
@@ -65,4 +57,31 @@ class _CircleAvatarWithErrorHandlerState
           : null,
     );
   }
+}
+
+class BaseExtendedImageNetwork extends ExtendedImage {
+  BaseExtendedImageNetwork({
+    super.key,
+    required String imageUrl,
+  }) : super.network(
+          imageUrl,
+          loadStateChanged: (state) {
+            switch (state.extendedImageLoadState) {
+              case LoadState.loading:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              case LoadState.completed:
+                return null;
+              case LoadState.failed:
+                return const Center(
+                  child: Icon(Icons.error),
+                );
+            }
+          },
+          fit: BoxFit.cover,
+          cacheMaxAge: const Duration(minutes: 1),
+          clearMemoryCacheWhenDispose: true,
+          clearMemoryCacheIfFailed: true,
+        );
 }

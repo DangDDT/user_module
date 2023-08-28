@@ -50,6 +50,13 @@ class DioErrorMapper extends ExceptionMapper<RemoteException> {
               );
             }
 
+            if (httpErrorCode == DefaultHttpStatusCodeConstants.unauthorized) {
+              return UnauthorizedRemoteException(
+                httpErrorCode: httpErrorCode,
+                serverError: serverError,
+              );
+            }
+
             if (httpErrorCode == DefaultHttpStatusCodeConstants.badRequest) {
               return RemoteException(
                 kind: RemoteExceptionKind.badRequest,

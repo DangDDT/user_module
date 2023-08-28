@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 extension ListExt<E> on List<E> {
   /// Return first element that match [test] or null if not found
   E? firstOrDefault(
@@ -54,6 +56,19 @@ extension ListExt<E> on List<E> {
   List<E>? clone() {
     if (isEmpty) return null;
     return List<E>.from(this);
+  }
+}
+
+extension ListWidget on List<Widget> {
+  List<Widget> joinWidget(Widget widget) {
+    final result = <Widget>[];
+    for (int i = 0; i < length; i++) {
+      result.add(this[i]);
+      if (i != length - 1) {
+        result.add(widget);
+      }
+    }
+    return result;
   }
 }
 

@@ -21,14 +21,6 @@ export 'models/base/result_response.dart';
 
 export 'models/models.dart';
 export 'requests/_sample_request.dart';
-export 'requests/get_bank_office_param.dart';
-export 'requests/get_bank_offices_param.dart';
-export 'requests/get_loan_request_param.dart';
-export 'requests/get_loan_requests_param.dart';
-export 'requests/post_bank_office_body.dart';
-export 'requests/post_bank_registration_response_body.dart';
-export 'requests/post_loan_request_body.dart';
-export 'requests/post_loan_response_body.dart';
 export 'requests/requests.dart';
 
 export 'services/sample_service.dart';

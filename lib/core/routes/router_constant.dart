@@ -11,26 +11,9 @@
 class RouteConstants {
   const RouteConstants._();
 
-  static final String bankRegistrationRoute = '/bankRegistrationRoute';
+  static const String loginRoute = '/login';
 
-  static final String handleBankRegistrationRoute =
-      '/handleBankRegistrationRoute';
+  static const String editProfileRoute = '/edit-profile';
 
-  static final String approveBankRegistrationRoute =
-      '/approveBankRegistrationRoute';
-
-  static final String listBankRegistrationRoute = '/listBankRegistrationRoute';
-
-  static final String listLoanRegistrationRoute = '/listLoanRegistrationRoute';
-
-  static final String loanRegistrationRoute = '/loanRegistrationRoute';
-
-  static final String loanRegistrationDetailRoute =
-      '/loanRegistrationDetailRoute';
-
-  static final String lookUpBankRegistrationRoute =
-      '/lookUpBankRegistrationRoute';
-
-  static final String loanRequestModuleDashboard =
-      '/loanRequestModuleDashboard';
+  static const String registerRoute = '/register';
 }

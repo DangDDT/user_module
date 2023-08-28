@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart' as dio_package;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' as get_package;
+import 'package:user_module/src/presentation/controllers/auth_controller.dart';
 
 import '../../../../core/core.dart';
 import '../../../domain/domain.dart';
@@ -40,7 +42,7 @@ class DioClient {
             [
               if (kDebugMode && _config.isShowLog == true)
                 TalkerDioLoggerInterceptor(),
-              if (_config.getAuthConfig != null) RefreshTokenInterceptor(),
+              // if (_config.getAuthConfig != null) RefreshTokenInterceptor(),
             ],
           );
 
@@ -66,6 +68,24 @@ class DioClient {
       return result;
     } on CustomException {
       rethrow;
+    } on UnauthorizedRemoteException {
+      get_package.Get.dialog(
+        AlertDialog(
+          title: const Text('Thông báo'),
+          content: const Text('Phiên đăng nhập đã hết hạn'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                final AuthController authController =
+                    get_package.Get.find(tag: AuthController.tag);
+                authController.logout();
+              },
+              child: const Text('Quay về màn hình đăng nhập'),
+            ),
+          ],
+        ),
+      );
+      throw UnauthorizedRemoteException();
     } catch (error) {
       throw DioErrorMapper(
         errorResponseMapper ??

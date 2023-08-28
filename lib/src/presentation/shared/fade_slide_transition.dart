@@ -34,7 +34,7 @@ class _FadeSlideTransitionState extends State<FadeSlideTransition>
       opacity: _animation,
       child: SlideTransition(
         position: Tween<Offset>(
-          begin: const Offset(0, 0.1),
+          begin: const Offset(0, 0.5),
           end: const Offset(0, 0),
         ).animate(_animation),
         child: widget.child,

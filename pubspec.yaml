@@ -4,10 +4,12 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.19.2 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   freezed: ^2.4.1
   get: ^4.6.5
@@ -21,7 +23,11 @@ dependencies:
   google_fonts: ^5.1.0
   keyboard_dismisser: ^3.0.0
   font_awesome_flutter: ^10.5.0
-
+  faker: ^2.1.0
+  path_provider: ^2.1.0
+  dio: ^5.3.2
+  shimmer: ^3.0.0
+  extended_image: ^8.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

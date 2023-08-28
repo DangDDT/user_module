@@ -100,3 +100,16 @@ class UnprocessableEntityRemoteException extends RemoteException {
           httpErrorCode: httpErrorCode,
         );
 }
+
+class UnauthorizedRemoteException extends RemoteException {
+  UnauthorizedRemoteException({
+    int? httpErrorCode,
+    ServerError? serverError,
+    Object? rootException,
+  }) : super(
+          kind: RemoteExceptionKind.serverDefined,
+          serverError: serverError,
+          rootException: rootException,
+          httpErrorCode: httpErrorCode,
+        );
+}

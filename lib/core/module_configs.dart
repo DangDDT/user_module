@@ -8,36 +8,47 @@ class ModuleConfig {
   static const String tag = '${UserModule.packageName}_ModuleConfig';
   ModuleConfig({
     this.isShowLog = false,
+    this.mockConfig,
     required this.baseUrlConfig,
-    this.viewConfig,
-  })  : _userConfig = null,
-        _authConfig = null;
+    this.loginViewConfig,
+    required this.homeRoute,
+    required this.onRefreshTokenApiCallback,
+  })
+  // :
+  // _userConfig = null,
+  //       _authConfig = null
+  ;
 
   final bool isShowLog;
 
+  final MockConfig? mockConfig;
+
   final BaseUrlConfig baseUrlConfig;
 
-  final ViewConfig? viewConfig;
+  final LoginViewConfig? loginViewConfig;
 
-  UserConfig? _userConfig;
+  final Future<AuthenticatedUser?> Function(
+      String refreshToken, String accessToken)? onRefreshTokenApiCallback;
 
-  UserConfig get userConfig {
-    if (_userConfig == null) {
-      throw AssertionError("Bạn chưa đăng nhập để sử dụng chức năng này");
-    }
+  // UserConfig? _userConfig;
 
-    return _userConfig!;
-  }
+  // UserConfig get userConfig {
+  //   if (_userConfig == null) {
+  //     throw AssertionError("Bạn chưa đăng nhập để sử dụng chức năng này");
+  //   }
 
-  set setUserConfig(UserConfig? userConfig) {
-    _userConfig = userConfig;
-  }
+  //   return _userConfig!;
+  // }
 
-  ///[authConfig] là các config về auth của module
-  ///[authConfig] là config để authen/authorize cho module
-  AuthConfig? _authConfig;
-  AuthConfig? get getAuthConfig => _authConfig;
-  set setAuthConfig(AuthConfig? authConfig) => _authConfig = authConfig;
+  // set setUserConfig(UserConfig? userConfig) {
+  //   _userConfig = userConfig;
+  // }
+
+  // ///[authConfig] là các config về auth của module
+  // ///[authConfig] là config để authen/authorize cho module
+  // AuthConfig? _authConfig;
+  // AuthConfig? get getAuthConfig => _authConfig;
+  // set setAuthConfig(AuthConfig? authConfig) => _authConfig = authConfig;
 
   // ModuleRole? _moduleRole;
   // ModuleRole get moduleRole {
@@ -49,6 +60,8 @@ class ModuleConfig {
   // }
 
   // set setModuleRole(ModuleRole? moduleRole) => _moduleRole = moduleRole;
+
+  String homeRoute;
 }
 
 class BaseUrlConfig {
@@ -59,14 +72,14 @@ class BaseUrlConfig {
   });
 }
 
-class ViewConfig {
+class LoginViewConfig {
   final String? imageBackground;
   final Widget? logo;
   final String appName;
   final bool isShowRegisterButton;
   final bool isShowForgotPasswordButton;
 
-  ViewConfig({
+  LoginViewConfig({
     this.imageBackground,
     this.logo,
     required this.appName,
@@ -79,6 +92,13 @@ class UserConfig {
   final int userId;
   const UserConfig({
     required this.userId,
+  });
+}
+
+class MockConfig {
+  final Role role;
+  const MockConfig({
+    required this.role,
   });
 }
 
