@@ -70,7 +70,7 @@ class AuthenticatedUserDTO {
       token: token,
       refreshToken: refreshToken,
       expiredAt: expiredAt,
-      user: AppUser(
+      user: AppUserModel(
         id: userId,
         fullName: fullName,
         phoneNumber: phoneNumber,

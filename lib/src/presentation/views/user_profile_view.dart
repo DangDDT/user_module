@@ -18,7 +18,7 @@ class UserProfileView extends StatelessWidget {
 }
 
 class _UserProfile extends StatelessWidget {
-  final AppUser user;
+  final AppUserModel user;
   const _UserProfile({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class _UserProfile extends StatelessWidget {
 }
 
 class _ProfileInfomation extends StatelessWidget {
-  final AppUser user;
+  final AppUserModel user;
   const _ProfileInfomation({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -134,7 +134,7 @@ class _ProfileCover extends StatelessWidget {
     required this.user,
   });
 
-  final AppUser user;
+  final AppUserModel user;
 
   @override
   Widget build(BuildContext context) {

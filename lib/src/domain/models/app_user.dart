@@ -3,7 +3,7 @@ import 'package:faker/faker.dart';
 import 'package:get/get.dart';
 import 'package:user_module/core/core.dart';
 
-class AppUser {
+class AppUserModel {
   final dynamic id;
   final String fullName;
   final String phoneNumber;
@@ -13,7 +13,7 @@ class AppUser {
   final DateTime dob;
   final String address;
   final Role role;
-  AppUser({
+  AppUserModel({
     required this.id,
     required this.fullName,
     required this.phoneNumber,
@@ -25,10 +25,10 @@ class AppUser {
     required this.role,
   });
 
-  factory AppUser.mock() {
+  factory AppUserModel.mock() {
     final ModuleConfig moduleConfig = Get.find(tag: ModuleConfig.tag);
     final faker = Faker();
-    return AppUser(
+    return AppUserModel(
       id: faker.guid.guid(),
       fullName: faker.person.name(),
       phoneNumber: '0774839222',
@@ -69,11 +69,11 @@ enum Role {
 
   static Role fromString(String? value) {
     switch (value) {
-      case 'CUSTOMER':
+      case 'Customer':
         return Role.customer;
-      case 'PARTNER':
+      case 'Partner':
         return Role.partner;
-      case 'STAFF':
+      case 'Staff':
         return Role.staff;
       default:
         return throw Exception('Role not found');
@@ -85,7 +85,7 @@ class AuthenticatedUser {
   final String token;
   final String refreshToken;
   final DateTime expiredAt;
-  final AppUser user;
+  final AppUserModel user;
 
   AuthenticatedUser({
     required this.token,
@@ -100,7 +100,7 @@ class AuthenticatedUser {
       token: faker.guid.guid(),
       refreshToken: faker.guid.guid(),
       expiredAt: DateTime.now().add(const Duration(days: 1)),
-      user: AppUser.mock(),
+      user: AppUserModel.mock(),
     );
   }
 }

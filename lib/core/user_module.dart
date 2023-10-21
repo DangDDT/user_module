@@ -25,11 +25,11 @@ class UserModule {
   static Future<String?> get getAccessToken async =>
       Get.find<AuthController>(tag: AuthController.tag).accessToken;
 
-  ///The current logged in [AppUser]. If there is no user logged in, this will return `null`.
+  ///The current logged in [AppUserModel]. If there is no user logged in, this will return `null`.
   ///
   ///In case you want to access user data to build UI, you should use [AuthViewBuilder] instead
   ///to achieve auto rebuild UI when the authentication state changes.
-  static AppUser? get currentUser =>
+  static AppUserModel? get currentUser =>
       Get.find<AuthController>(tag: AuthController.tag).currentUser.value?.user;
 
   static Future<void> init({
@@ -37,10 +37,7 @@ class UserModule {
     required BaseUrlConfig baseUrlConfig,
     LoginViewConfig? viewConfig,
     required String homeRoute,
-    required Future<AuthenticatedUser?> Function(
-      String refreshToken,
-      String accessToken,
-    )? onRefreshTokenApiCallback,
+    OnGetFirebaseToken? onGetFirebaseTokenCallback,
     MockConfig? mockConfig,
   }) async {
     await IsarDatabase.init();
@@ -49,7 +46,7 @@ class UserModule {
       baseUrlConfig: baseUrlConfig,
       viewConfig: viewConfig,
       homeRoute: homeRoute,
-      onRefreshTokenApiCallback: onRefreshTokenApiCallback,
+      onGetFirebaseTokenCallback: onGetFirebaseTokenCallback,
       mockConfig: mockConfig,
     );
     _isInitialized = true;

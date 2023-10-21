@@ -4,7 +4,6 @@ import 'package:user_module/core/core.dart';
 import 'package:user_module/src/domain/services/isar/daos/authenticated_user_dao.dart';
 import 'package:user_module/src/presentation/controllers/auth_controller.dart';
 
-import '../../src/domain/services/isar/dtos/authenticated_user_dto.dart';
 import '../utils/helpers/logger.dart';
 
 class RefreshTokenInterceptor implements Interceptor {
@@ -53,9 +52,8 @@ class RefreshTokenInterceptor implements Interceptor {
       if (error.response!.statusCode == 401) {
         try {
           final requestOptions = error.requestOptions;
-          final authUserData = await refreshToken();
-          if (authUserData == null) return handler.next(error);
-
+          // final authUserData = await refreshToken();
+          // if (authUserData == null) return handler.next(error);
           final accessToken = _authController.accessToken;
           final opts = Options(method: requestOptions.method);
           final dioClient = Dio();
@@ -85,27 +83,27 @@ class RefreshTokenInterceptor implements Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) =>
       handler.next(response);
 
-  static Future<AuthenticatedUser?> refreshToken() async {
-    try {
-      final currentUser = _authController.currentUser;
-      if (currentUser == null) return null;
-      final localAuthData = await _localAuthRepository.getAppUser();
-      if (localAuthData == null) return null;
-      final refreshToken = localAuthData.refreshToken;
-      final accessToken = localAuthData.token;
-      final newAuthData = await _config.onRefreshTokenApiCallback
-          ?.call(refreshToken, accessToken);
-      final newAuthDataDTO = AuthenticatedUserDTO.fromAuthUser(newAuthData);
-      _localAuthRepository.updateAppUser(newAuthDataDTO);
-      final newAuthDataUpdated = await _localAuthRepository.getAppUser();
-      return newAuthDataUpdated?.toAuthUser();
-    } catch (e, stackStrace) {
-      Logger.log(
-        e.toString(),
-        stackTrace: stackStrace,
-        name: 'ON_REFRESH_TOKEN_ERROR',
-      );
-      rethrow;
-    }
-  }
+  // static Future<AuthenticatedUser?> refreshToken() async {
+  //   try {
+  //     final currentUser = _authController.currentUser.value;
+  //     if (currentUser == null) return null;
+  //     final localAuthData = await _localAuthRepository.getAppUser();
+  //     if (localAuthData == null) return null;
+  //     final refreshToken = localAuthData.refreshToken;
+  //     final accessToken = localAuthData.token;
+  //     final newAuthData = await _config.onRefreshTokenApiCallback
+  //         ?.call(refreshToken, accessToken);
+  //     final newAuthDataDTO = AuthenticatedUserDTO.fromAuthUser(newAuthData);
+  //     _localAuthRepository.updateAppUser(newAuthDataDTO);
+  //     final newAuthDataUpdated = await _localAuthRepository.getAppUser();
+  //     return newAuthDataUpdated?.toAuthUser();
+  //   } catch (e, stackStrace) {
+  //     Logger.log(
+  //       e.toString(),
+  //       stackTrace: stackStrace,
+  //       name: 'ON_REFRESH_TOKEN_ERROR',
+  //     );
+  //     rethrow;
+  //   }
+  // }
 }

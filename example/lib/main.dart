@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:isar/isar.dart';
 import 'package:user_module/core/core.dart';
-import 'package:user_module/core/routes/middlewares/auth_middleware.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,43 +22,8 @@ Future<void> init() async {
       isShowForgotPasswordButton: false,
       isShowRegisterButton: true,
     ),
-    onRefreshTokenApiCallback: (refreshToken, accessToken) async {
-      return null;
-      // final dio = Dio(
-      //   BaseOptions(
-      //     baseUrl: '',
-      //     sendTimeout: const Duration(seconds: 25),
-      //     connectTimeout: const Duration(seconds: 25),
-      //     receiveTimeout: const Duration(seconds: 25),
-      //   ),
-      // );
-      // if (kDebugMode) {
-      //   dio.interceptors.add(
-      //     LogInterceptor(
-      //       responseBody: true,
-      //       requestBody: true,
-      //     ),
-      //   );
-      // }
-      // dio.options.headers['Authorization'] = 'Bearer $accessToken';
-      // final response = await dio.post<dynamic>(
-      //   '${''}/JwtAuth/api/mobile/ExtendToken',
-      //   data: jsonEncode({
-      //     'rtoken': refreshToken,
-      //   }),
-      // );
-      // if (response.statusCode != 200) return null;
-      // final userId = response.data['userId'] as int;
-      // final expiredAt = response.data['expiredAt'] as DateTime;
-      // final newAccessToken = response.data['accessToken'] as String;
-      // final newRefreshToken = response.data['renewalToken'] as String;
-      // final newAuthData = AuthenticatedUser(
-      //   user: AppUser.mock(),
-      //   token: newAccessToken,
-      //   expiredAt: expiredAt,
-      //   refreshToken: newRefreshToken,
-      // );
-      // return newAuthData;
+    onGetFirebaseTokenCallback: (email, password) async {
+      return '';
     },
   );
 }

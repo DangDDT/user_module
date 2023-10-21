@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:user_module/core/utils/helpers/logger.dart';
 import 'package:user_module/src/domain/services/isar/daos/authenticated_user_dao.dart';
+import 'package:user_module/src/domain/services/user_service.dart';
 
 import '../../../core/core.dart';
 import '../../../core/typedefs/auth_listener.dart';
@@ -12,6 +14,7 @@ class AuthController extends GetxController with AuthListenerMixins {
   final AuthenticatedUserDAO _authDAO = Get.find<AuthenticatedUserDAO>(
     tag: AuthenticatedUserDAO.tag,
   );
+  final UserService _userService = Get.find();
 
   final ModuleConfig _moduleConfig =
       Get.find<ModuleConfig>(tag: ModuleConfig.tag);
@@ -29,21 +32,55 @@ class AuthController extends GetxController with AuthListenerMixins {
   }
 
   Future<AuthenticatedUser?> _checkAuth() async {
-    final AuthenticatedUser? authUser =
-        await _getUserApi() ?? await _getUserLocal();
+    final AuthenticatedUser? authUser = await getUser(
+      token: null,
+    );
     if (authUser == null) {
       return null;
     }
     return authUser;
   }
 
-  Future<AuthenticatedUser?> _getUserApi() async {
-    ///TODO: Call api get user
-    return null;
+  Future<AuthenticatedUser?> getUser({
+    required String? token,
+  }) async {
+    try {
+      if (token == null) {
+        final localUser = await _getUserLocal();
+        if (localUser == null) {
+          return null;
+        }
+        final user = await _userService.getUserInfo(
+          token: localUser.token,
+        );
+        return AuthenticatedUser(
+          expiredAt: DateTime(2100),
+          refreshToken: '',
+          token: localUser.token,
+          user: user,
+        );
+      } else {
+        final user = await _userService.getUserInfo(
+          token: token,
+        );
+        return AuthenticatedUser(
+          expiredAt: DateTime(2100),
+          refreshToken: '',
+          token: token,
+          user: user,
+        );
+      }
+    } catch (e, stackTrace) {
+      Logger.log(
+        e.toString(),
+        name: 'AuthController - getUserApi',
+        stackTrace: stackTrace,
+      );
+      return null;
+    }
   }
 
   Future<AuthenticatedUser?> _getUserLocal() async {
-    ///TODO: Call local get user
     final AuthenticatedUserDTO? authenticatedUserDTO =
         await _authDAO.getAppUser();
     final AuthenticatedUser? authUser = authenticatedUserDTO?.toAuthUser();

@@ -25,13 +25,12 @@ class LoginController extends GetxController {
   Future<void> onLogin() async {
     state.onChangeLoginLoading(true);
     try {
-      await Future.delayed(const Duration(seconds: 2));
-
-      ///TODO: Call api login
       final user = await callLoginApi();
       if (user == null) {
         throw ValidationException(
           ValidationExceptionKind.invalidOutput,
+          message: 'Không tìm thấy tài khoản của người dùng trong hệ thống',
+          advice: 'Vui lòng liên hệ với quản trị viên để được hỗ trợ',
         );
       }
       await _authController.login(user);
@@ -43,18 +42,79 @@ class LoginController extends GetxController {
         name: 'LoginController - onLogin',
         stackTrace: stackTrace,
       );
-      Toast.showError(
-        title: 'Đăng nhập thất bại',
-        message: 'Đã có lỗi xảy ra, vui lòng thử lại!',
-      );
     } finally {
       state.onChangeLoginLoading(false);
     }
   }
 
   Future<AuthenticatedUser?> callLoginApi() async {
-    ///TODO: Call api login
-    return AuthenticatedUser.mock();
+    try {
+      if (usernameController.text.isEmpty) {
+        Toast.showInfo(
+          message: 'Vui lòng nhập tên đăng nhập',
+        );
+        throw ValidationException(
+          ValidationExceptionKind.invalidInput,
+          message: 'Vui lòng nhập tên đăng nhập',
+        );
+      }
+      if (!usernameController.text.isEmail) {
+        Toast.showInfo(
+          message: 'Vui lòng nhập đúng định dạng email',
+        );
+        throw ValidationException(
+          ValidationExceptionKind.invalidInput,
+          message: 'Vui lòng nhập đúng định dạng email',
+        );
+      }
+      if (passwordController.text.isEmpty) {
+        Toast.showInfo(
+          message: 'Vui lòng nhập mật khẩu',
+        );
+        throw ValidationException(
+          ValidationExceptionKind.invalidInput,
+          message: 'Vui lòng nhập mật khẩu',
+        );
+      }
+      final token = await _moduleConfig.onGetFirebaseToken?.call(
+        usernameController.text,
+        passwordController.text,
+      );
+      if (token == null) {
+        Toast.showError(
+          title: 'Không tìm thấy tài khoản của bạn trong hệ thống',
+          message: 'Vui lòng liên hệ với cửa hàng để được hỗ trợ',
+        );
+        throw ValidationException(
+          ValidationExceptionKind.invalidOutput,
+          message: 'Không tìm thấy tài khoản của người dùng trong hệ thống',
+          advice: 'Vui lòng liên hệ với quản trị viên để được hỗ trợ',
+        );
+      }
+      final user = await _authController.getUser(token: token);
+      if (user == null) {
+        Toast.showError(
+          title: 'Không tìm thấy tài khoản của bạn trong hệ thống',
+          message: 'Vui lòng liên hệ với cửa hàng để được hỗ trợ',
+        );
+        throw ValidationException(
+          ValidationExceptionKind.invalidOutput,
+          message: 'Không tìm thấy tài khoản của người dùng trong hệ thống',
+          advice: 'Vui lòng liên hệ với quản trị viên để được hỗ trợ',
+        );
+      }
+      return user;
+    } catch (e) {
+      Logger.log(
+        e.toString(),
+        name: 'LoginController - callLoginApi',
+      );
+      Toast.showError(
+        title: 'Đăng nhập thất bại',
+        message: 'Vui lòng kiểm tra lại thông tin đăng nhập',
+      );
+    }
+    return null;
   }
 
   Future<void> _onLoginSuccess() async {

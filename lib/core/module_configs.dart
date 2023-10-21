@@ -12,7 +12,7 @@ class ModuleConfig {
     required this.baseUrlConfig,
     this.loginViewConfig,
     required this.homeRoute,
-    required this.onRefreshTokenApiCallback,
+    this.onGetFirebaseToken,
   })
   // :
   // _userConfig = null,
@@ -27,8 +27,7 @@ class ModuleConfig {
 
   final LoginViewConfig? loginViewConfig;
 
-  final Future<AuthenticatedUser?> Function(
-      String refreshToken, String accessToken)? onRefreshTokenApiCallback;
+  final OnGetFirebaseToken? onGetFirebaseToken;
 
   // UserConfig? _userConfig;
 
@@ -106,15 +105,18 @@ class AuthConfig {
   /// TODO: Thêm các trường dữ liệu cần thiết để thực hiện các chức năng cho module
 
   /// [accessToken] là callback được gọi để truyền accesstoken vào header của api
-  final OnGetTokenCallback accessToken;
+  final OnGetFirebaseToken accessToken;
 
   /// [onRefreshTokenCallback] là callback được gọi khi có lỗi xảy ra với api
-  final OnRefreshTokenCallback onRefreshTokenCallback;
+  // final OnRefreshTokenCallback onRefreshTokenCallback;
   AuthConfig({
     required this.accessToken,
-    required this.onRefreshTokenCallback,
+    // required this.onRefreshTokenCallback,
   });
 }
 
-typedef OnGetTokenCallback = Future<String?> Function();
+typedef OnGetFirebaseToken = Future<String?> Function(
+  String email,
+  String password,
+);
 typedef OnRefreshTokenCallback = Future<String?> Function();

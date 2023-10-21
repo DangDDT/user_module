@@ -20,7 +20,7 @@ class AuthViewBuilderWrapper extends AuthPageBuilder {
   ///
   ///If [onAuthenticated] is null, the [builder] will be used instead.
   /// otherwise, the [onAuthenticated] will be used.
-  final Widget Function(AppUser user)? onAuthenticated;
+  final Widget Function(AppUserModel user)? onAuthenticated;
 
   ///[onUnAuthenticated] is the widget builder to build when the user is unauthenticated.
   ///

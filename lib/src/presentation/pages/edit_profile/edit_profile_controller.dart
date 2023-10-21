@@ -19,7 +19,7 @@ class EditProfileController extends GetxController {
     tag: AuthenticatedUserDAO.tag,
   );
 
-  AppUser? get currentUser => _authController.currentUser.value?.user;
+  AppUserModel? get currentUser => _authController.currentUser.value?.user;
 
   ///Controllers
   late final TextEditingController fullNameController;
@@ -70,7 +70,7 @@ class EditProfileController extends GetxController {
         );
       }
 
-      final AppUser updatedUser = AppUser(
+      final AppUserModel updatedUser = AppUserModel(
         id: currentUser!.id,
         fullName: fullNameController.text,
         phoneNumber: phoneNumberController.text.toPhoneNumberStringFromFormat(),
@@ -103,13 +103,13 @@ class EditProfileController extends GetxController {
     isSaveLoading.value = false;
   }
 
-  Future<void> _callUpdateProfileApi(AppUser appUser) async {
+  Future<void> _callUpdateProfileApi(AppUserModel appUser) async {
     //TODO: Call api update profile
     await Future.delayed(const Duration(seconds: 2));
   }
 
   Future<void> _saveNewProfileToLocal(
-      AuthenticatedUser currentUser, AppUser appUser) async {
+      AuthenticatedUser currentUser, AppUserModel appUser) async {
     final AuthenticatedUser updatedUser = AuthenticatedUser(
       token: currentUser.token,
       refreshToken: currentUser.refreshToken,
@@ -121,7 +121,7 @@ class EditProfileController extends GetxController {
     await _authDAO.updateAppUser(updatedUserDTO);
   }
 
-  Future<void> _changeCurrentUser(AppUser appUser) async {
+  Future<void> _changeCurrentUser(AppUserModel appUser) async {
     final AuthenticatedUser? currentUser = _authController.currentUser.value;
     if (currentUser == null) {
       throw ValidationException(

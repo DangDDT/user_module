@@ -63,7 +63,7 @@ extension AuthenticationStateExt on Rx<AuthState> {
   ///otherwise, the [onAuthenticated] or [onUnauthenticated] will be used instead.
   Widget when({
     NotifierBuilder<AuthState>? builder,
-    Widget Function(AppUser user)? onAuthenticated,
+    Widget Function(AppUserModel user)? onAuthenticated,
     Widget Function()? onUnauthenticated,
   }) {
     return Obx(() {
