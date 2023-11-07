@@ -31,7 +31,9 @@ dependencies:
   extended_image: ^8.0.2
 
   core_picker:
-    path: ../picker_package
+    git:
+      url: https://github.com/DangDDT/picker_package.git
+      ref: main
 dev_dependencies:
   flutter_test:
     sdk: flutter
