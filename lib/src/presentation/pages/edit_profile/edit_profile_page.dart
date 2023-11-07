@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -30,7 +32,11 @@ class EditProfilePage extends GetView<EditProfileController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               kGapH24,
-              Center(child: FadeTransitionWrapper(child: _UserAvatar())),
+              Center(
+                child: FadeTransitionWrapper(
+                  child: _AvatarBuilder(),
+                ),
+              ),
               kGapH12,
               FadeTransitionWrapper(child: _EditProfileForm()),
             ],
@@ -41,11 +47,58 @@ class EditProfilePage extends GetView<EditProfileController> {
   }
 }
 
-class _UserAvatar extends StatelessWidget {
-  const _UserAvatar();
+class _AvatarBuilder extends GetView<EditProfileController> {
+  const _AvatarBuilder();
 
   @override
   Widget build(BuildContext context) {
+    return Obx(() {
+      if (controller.updatingAvatar.value != null) {
+        return _UserAvatar.localFile(
+          localFileToUpdate: controller.updatingAvatar.value,
+          fullName: '',
+        );
+      } else {
+        return _UserAvatar(
+          avatarUrl: controller.currentUser?.avatar,
+          fullName: controller.currentUser!.fullName,
+        );
+      }
+    });
+  }
+}
+
+class _UserAvatar extends GetView<EditProfileController> {
+  final String? avatarUrl;
+  final String fullName;
+  final File? localFileToUpdate;
+  const _UserAvatar({
+    required this.avatarUrl,
+    required this.fullName,
+  }) : localFileToUpdate = null;
+  const _UserAvatar.localFile({
+    required this.localFileToUpdate,
+    required this.fullName,
+  }) : avatarUrl = null;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageProvider = localFileToUpdate != null
+        ? BaseExtendedImageFile(file: localFileToUpdate!)
+        : avatarUrl != null
+            ? BaseExtendedImageNetwork(imageUrl: avatarUrl!)
+            : null;
+    final circleAvatar = localFileToUpdate != null
+        ? CircleAvatarWithErrorHandler.file(
+            radius: 64,
+            file: localFileToUpdate!,
+            fullName: fullName,
+          )
+        : CircleAvatarWithErrorHandler(
+            avatarUrl: avatarUrl,
+            fullName: fullName,
+            radius: 64,
+          );
     const double radius = 64;
     return AuthViewBuilderWrapper(
       onAuthenticated: (user) => Container(
@@ -54,9 +107,7 @@ class _UserAvatar extends StatelessWidget {
         height: 175,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: BaseExtendedImageNetwork(
-              imageUrl: user.avatar,
-            ).image,
+            image: imageProvider!.image,
             fit: BoxFit.cover,
             opacity: .2,
           ),
@@ -78,11 +129,7 @@ class _UserAvatar extends StatelessWidget {
             ],
           ),
           child: _EditAvatarWrapper(
-            child: CircleAvatarWithErrorHandler(
-              avatarUrl: user.avatar,
-              fullName: user.fullName,
-              radius: radius,
-            ),
+            child: circleAvatar,
           ),
         ),
       ),
@@ -91,7 +138,7 @@ class _UserAvatar extends StatelessWidget {
   }
 }
 
-class _EditAvatarWrapper extends StatelessWidget {
+class _EditAvatarWrapper extends GetView<EditProfileController> {
   final Widget child;
   const _EditAvatarWrapper({required this.child});
 
@@ -105,7 +152,7 @@ class _EditAvatarWrapper extends StatelessWidget {
           bottom: -5,
           right: -5,
           child: IconButton.filledTonal(
-            onPressed: () {},
+            onPressed: controller.onChangeAvatar,
             icon: const Icon(
               Icons.edit,
             ),

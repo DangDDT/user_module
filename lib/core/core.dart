@@ -8,7 +8,7 @@ export 'user_module.dart';
 export 'gens/assets.dart';
 export 'global_binding.dart';
 export 'interceptors/log_interceptor.dart';
-export 'interceptors/refresh_token_interceptor.dart';
+export 'interceptors/auth_interceptor.dart';
 export 'l10n/_language_keys.dart';
 export 'l10n/_languages.dart';
 export 'l10n/_translate_manager.dart';

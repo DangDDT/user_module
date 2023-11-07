@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +11,18 @@ class CircleAvatarWithErrorHandler extends StatefulWidget {
     required this.avatarUrl,
     required this.fullName,
     this.radius = 12,
-  });
+  }) : file = null;
+  const CircleAvatarWithErrorHandler.file({
+    super.key,
+    required this.file,
+    required this.fullName,
+    this.radius = 12,
+  }) : avatarUrl = null;
+
   final String? avatarUrl;
   final String? fullName;
   final double radius;
+  final File? file;
 
   @override
   State<CircleAvatarWithErrorHandler> createState() =>
@@ -25,6 +35,11 @@ class _CircleAvatarWithErrorHandlerState
 
   @override
   Widget build(BuildContext context) {
+    final imageProvider = widget.file != null
+        ? BaseExtendedImageFile(file: widget.file!)
+        : widget.avatarUrl != null
+            ? BaseExtendedImageNetwork(imageUrl: widget.avatarUrl!)
+            : null;
     final theme = Theme.of(context);
     final backgroundColor = theme.colorScheme.primary.withOpacity(.8);
     TextStyle? textStyle = kTheme.textTheme.bodyMedium?.copyWith(
@@ -33,9 +48,7 @@ class _CircleAvatarWithErrorHandlerState
     return CircleAvatar(
       radius: widget.radius,
       backgroundColor: backgroundColor,
-      backgroundImage: widget.avatarUrl != null
-          ? BaseExtendedImageNetwork(imageUrl: widget.avatarUrl!).image
-          : null,
+      backgroundImage: imageProvider!.image,
       onBackgroundImageError: widget.avatarUrl != null
           ? (exception, stackTrace) {
               if (!isAvatarLoadError) {
@@ -79,8 +92,33 @@ class BaseExtendedImageNetwork extends ExtendedImage {
                 );
             }
           },
-          fit: BoxFit.cover,
           cacheMaxAge: const Duration(minutes: 1),
+          clearMemoryCacheWhenDispose: true,
+          clearMemoryCacheIfFailed: true,
+        );
+}
+
+class BaseExtendedImageFile extends ExtendedImage {
+  BaseExtendedImageFile({
+    super.key,
+    required File file,
+  }) : super.file(
+          file,
+          loadStateChanged: (state) {
+            switch (state.extendedImageLoadState) {
+              case LoadState.loading:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              case LoadState.completed:
+                return null;
+              case LoadState.failed:
+                return const Center(
+                  child: Icon(Icons.error),
+                );
+            }
+          },
+          fit: BoxFit.cover,
           clearMemoryCacheWhenDispose: true,
           clearMemoryCacheIfFailed: true,
         );

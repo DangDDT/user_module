@@ -1,20 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as get_x_package;
-import 'package:user_module/core/core.dart';
-import 'package:user_module/src/domain/services/isar/daos/authenticated_user_dao.dart';
 import 'package:user_module/src/presentation/controllers/auth_controller.dart';
 
 import '../utils/helpers/logger.dart';
 
-class RefreshTokenInterceptor implements Interceptor {
+class AuthInterceptor implements Interceptor {
   static final AuthController _authController =
       get_x_package.Get.find(tag: AuthController.tag);
 
-  static final AuthenticatedUserDAO _localAuthRepository =
-      get_x_package.Get.find(tag: AuthenticatedUserDAO.tag);
+  // static final AuthenticatedUserDAO _localAuthRepository =
+  //     get_x_package.Get.find(tag: AuthenticatedUserDAO.tag);
 
-  static final ModuleConfig _config =
-      get_x_package.Get.find(tag: ModuleConfig.tag);
+  // static final ModuleConfig _config =
+  //     get_x_package.Get.find(tag: ModuleConfig.tag);
 
   @override
   void onRequest(

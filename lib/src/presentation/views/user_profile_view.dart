@@ -23,7 +23,11 @@ class _UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _ProfileCover(user: user);
+    return Column(
+      children: [
+        _ProfileCover(user: user),
+      ],
+    );
   }
 }
 
@@ -289,11 +293,7 @@ class _GenderWrapper extends StatelessWidget {
       height: radius * 2 + borderWidth,
       child: Stack(
         children: [
-          Positioned(
-            left: 0,
-            right: 0,
-            child: child,
-          ),
+          child,
           Positioned(
             bottom: 0,
             right: 0,

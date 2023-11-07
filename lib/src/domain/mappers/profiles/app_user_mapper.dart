@@ -7,19 +7,25 @@ import '../z_mapper.dart';
 class AppUserMapper extends BaseDataMapperProfile<UserInfo, AppUserModel> {
   @override
   AppUserModel mapData(UserInfo entity, Mapper mapper) {
-    final mock = AppUserModel.mock();
     return AppUserModel(
-      id: entity.id ?? DefaultValueMapperConstants.defaultStringValue,
-      email: entity.username ?? DefaultValueMapperConstants.defaultStringValue,
-      role: Role.fromString(entity.roleName),
-
-      ///TODO: Bổ sung sau khi api trả về đầy đủ thông tin
-      fullName: mock.fullName,
-      phoneNumber: mock.phoneNumber,
-      address: mock.address,
-      avatar: mock.avatar,
-      dob: mock.dob,
-      gender: mock.gender,
-    );
+        id: entity.id ?? DefaultValueMapperConstants.defaultStringValue,
+        email:
+            entity.username ?? DefaultValueMapperConstants.defaultStringValue,
+        role: Role.fromString(entity.roleName),
+        fullName: entity.user?.fullname ??
+            DefaultValueMapperConstants.defaultStringValue,
+        phoneNumber: entity.user?.phone ??
+            DefaultValueMapperConstants.defaultStringValue,
+        address: entity.user?.address ??
+            DefaultValueMapperConstants.defaultStringValue,
+        avatar: entity.user?.imageUrl ??
+            DefaultValueMapperConstants.defaultStringValue,
+        dob: entity.user?.dateOfBirth ??
+            DefaultValueMapperConstants.defaultDateTimeValue,
+        gender: Gender.fromCode(entity.user?.gender),
+        extraData: {
+          'categoryId': entity.user?.categoryId,
+          'commissionId': DefaultValueMapperConstants.defaultStringValue,
+        });
   }
 }

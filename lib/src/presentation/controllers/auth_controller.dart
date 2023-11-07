@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:user_module/core/utils/helpers/logger.dart';
+import 'package:user_module/src/domain/domain.dart';
 import 'package:user_module/src/domain/services/isar/daos/authenticated_user_dao.dart';
 import 'package:user_module/src/domain/services/user_service.dart';
 
@@ -31,16 +32,6 @@ class AuthController extends GetxController with AuthListenerMixins {
     super.onInit();
   }
 
-  Future<AuthenticatedUser?> _checkAuth() async {
-    final AuthenticatedUser? authUser = await getUser(
-      token: null,
-    );
-    if (authUser == null) {
-      return null;
-    }
-    return authUser;
-  }
-
   Future<AuthenticatedUser?> getUser({
     required String? token,
   }) async {
@@ -53,12 +44,17 @@ class AuthController extends GetxController with AuthListenerMixins {
         final user = await _userService.getUserInfo(
           token: localUser.token,
         );
-        return AuthenticatedUser(
+
+        final newAuth = AuthenticatedUser(
           expiredAt: DateTime(2100),
           refreshToken: '',
           token: localUser.token,
           user: user,
         );
+        await _authDAO.updateAppUser(
+          AuthenticatedUserDTO.fromAuthUser(newAuth),
+        );
+        return newAuth;
       } else {
         final user = await _userService.getUserInfo(
           token: token,
@@ -70,6 +66,9 @@ class AuthController extends GetxController with AuthListenerMixins {
           user: user,
         );
       }
+    } on UnauthorizedRemoteException {
+      await logout();
+      return null;
     } catch (e, stackTrace) {
       Logger.log(
         e.toString(),
@@ -100,7 +99,9 @@ class AuthController extends GetxController with AuthListenerMixins {
   }
 
   Future<void> _onChangeAuthState() async {
-    final AuthenticatedUser? authUser = await _checkAuth();
+    final AuthenticatedUser? authUser = await getUser(
+      token: null,
+    );
     if (authUser == null) {
       _authState.value = UnthenticatedState();
       Get.offAllNamed(RouteConstants.loginRoute);

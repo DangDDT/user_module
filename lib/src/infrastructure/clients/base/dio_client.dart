@@ -30,6 +30,7 @@ class DioClient {
     this.successResponseMapperType =
         ResponseMapperConstants.defaultSuccessResponseMapperType,
     this.apiKey,
+    bool isUseAuthInterceptor = true,
   }) : _dio = dio_package.Dio(
           dio_package.BaseOptions(
             baseUrl: baseUrl,
@@ -42,11 +43,11 @@ class DioClient {
             [
               if (kDebugMode && _config.isShowLog == true)
                 TalkerDioLoggerInterceptor(),
-              // if (_config.getAuthConfig != null) RefreshTokenInterceptor(),
+              if (isUseAuthInterceptor) AuthInterceptor(),
             ],
           );
 
-  static Future<T> request<T, D>(
+  Future<T> request<T, D>(
     Function() request, {
     // ignore: avoid-dynamic
     Decoder<D>? decoder,

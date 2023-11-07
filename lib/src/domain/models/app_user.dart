@@ -13,6 +13,7 @@ class AppUserModel {
   final DateTime dob;
   final String address;
   final Role role;
+  final Map<String, dynamic> extraData;
   AppUserModel({
     required this.id,
     required this.fullName,
@@ -23,6 +24,7 @@ class AppUserModel {
     required this.dob,
     required this.address,
     required this.role,
+    required this.extraData,
   });
 
   factory AppUserModel.mock() {
@@ -38,6 +40,7 @@ class AppUserModel {
       gender: Gender.male,
       dob: DateTime(2000, 1, 1),
       role: moduleConfig.mockConfig?.role ?? Role.customer,
+      extraData: {},
     );
   }
 }
@@ -56,6 +59,41 @@ enum Gender {
   bool get isFemale => this == female;
 
   bool get isOther => this == other;
+
+  static Gender fromCode(String? code) {
+    switch (code) {
+      case 'Male':
+        return Gender.male;
+      case 'Female':
+        return Gender.female;
+      case 'Other':
+        return Gender.other;
+      default:
+        throw Exception('Invalid code');
+    }
+  }
+
+  String toStringKey() {
+    switch (this) {
+      case Gender.male:
+        return 'Male';
+      case Gender.female:
+        return 'Female';
+      case Gender.other:
+        return 'Other';
+    }
+  }
+
+  int toIntKey() {
+    switch (this) {
+      case Gender.male:
+        return 1;
+      case Gender.female:
+        return 0;
+      case Gender.other:
+        return 2;
+    }
+  }
 }
 
 enum Role {
@@ -79,6 +117,12 @@ enum Role {
         return throw Exception('Role not found');
     }
   }
+
+  bool get isCustomer => this == customer;
+
+  bool get isPartner => this == partner;
+
+  bool get isStaff => this == staff;
 }
 
 class AuthenticatedUser {

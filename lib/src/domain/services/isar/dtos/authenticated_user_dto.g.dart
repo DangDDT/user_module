@@ -28,55 +28,65 @@ const AuthenticatedUserDTOSchema = CollectionSchema(
       name: r'avatar',
       type: IsarType.string,
     ),
-    r'dob': PropertySchema(
+    r'categoryId': PropertySchema(
       id: 2,
+      name: r'categoryId',
+      type: IsarType.string,
+    ),
+    r'commissionId': PropertySchema(
+      id: 3,
+      name: r'commissionId',
+      type: IsarType.string,
+    ),
+    r'dob': PropertySchema(
+      id: 4,
       name: r'dob',
       type: IsarType.dateTime,
     ),
     r'email': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'email',
       type: IsarType.string,
     ),
     r'expiredAt': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'expiredAt',
       type: IsarType.dateTime,
     ),
     r'fullName': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'fullName',
       type: IsarType.string,
     ),
     r'gender': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'gender',
       type: IsarType.byte,
       enumMap: _AuthenticatedUserDTOgenderEnumValueMap,
     ),
     r'phoneNumber': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'phoneNumber',
       type: IsarType.string,
     ),
     r'refreshToken': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'refreshToken',
       type: IsarType.string,
     ),
     r'role': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'role',
       type: IsarType.byte,
       enumMap: _AuthenticatedUserDTOroleEnumValueMap,
     ),
     r'token': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'token',
       type: IsarType.string,
     ),
     r'userId': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'userId',
       type: IsarType.string,
     )
@@ -103,6 +113,18 @@ int _authenticatedUserDTOEstimateSize(
   var bytesCount = offsets.last;
   bytesCount += 3 + object.address.length * 3;
   bytesCount += 3 + object.avatar.length * 3;
+  {
+    final value = object.categoryId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.commissionId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.email.length * 3;
   bytesCount += 3 + object.fullName.length * 3;
   bytesCount += 3 + object.phoneNumber.length * 3;
@@ -120,16 +142,18 @@ void _authenticatedUserDTOSerialize(
 ) {
   writer.writeString(offsets[0], object.address);
   writer.writeString(offsets[1], object.avatar);
-  writer.writeDateTime(offsets[2], object.dob);
-  writer.writeString(offsets[3], object.email);
-  writer.writeDateTime(offsets[4], object.expiredAt);
-  writer.writeString(offsets[5], object.fullName);
-  writer.writeByte(offsets[6], object.gender.index);
-  writer.writeString(offsets[7], object.phoneNumber);
-  writer.writeString(offsets[8], object.refreshToken);
-  writer.writeByte(offsets[9], object.role.index);
-  writer.writeString(offsets[10], object.token);
-  writer.writeString(offsets[11], object.userId);
+  writer.writeString(offsets[2], object.categoryId);
+  writer.writeString(offsets[3], object.commissionId);
+  writer.writeDateTime(offsets[4], object.dob);
+  writer.writeString(offsets[5], object.email);
+  writer.writeDateTime(offsets[6], object.expiredAt);
+  writer.writeString(offsets[7], object.fullName);
+  writer.writeByte(offsets[8], object.gender.index);
+  writer.writeString(offsets[9], object.phoneNumber);
+  writer.writeString(offsets[10], object.refreshToken);
+  writer.writeByte(offsets[11], object.role.index);
+  writer.writeString(offsets[12], object.token);
+  writer.writeString(offsets[13], object.userId);
 }
 
 AuthenticatedUserDTO _authenticatedUserDTODeserialize(
@@ -141,20 +165,22 @@ AuthenticatedUserDTO _authenticatedUserDTODeserialize(
   final object = AuthenticatedUserDTO(
     address: reader.readString(offsets[0]),
     avatar: reader.readString(offsets[1]),
-    dob: reader.readDateTime(offsets[2]),
-    email: reader.readString(offsets[3]),
-    expiredAt: reader.readDateTime(offsets[4]),
-    fullName: reader.readString(offsets[5]),
+    categoryId: reader.readStringOrNull(offsets[2]),
+    commissionId: reader.readStringOrNull(offsets[3]),
+    dob: reader.readDateTime(offsets[4]),
+    email: reader.readString(offsets[5]),
+    expiredAt: reader.readDateTime(offsets[6]),
+    fullName: reader.readString(offsets[7]),
     gender: _AuthenticatedUserDTOgenderValueEnumMap[
-            reader.readByteOrNull(offsets[6])] ??
+            reader.readByteOrNull(offsets[8])] ??
         Gender.male,
-    phoneNumber: reader.readString(offsets[7]),
-    refreshToken: reader.readString(offsets[8]),
+    phoneNumber: reader.readString(offsets[9]),
+    refreshToken: reader.readString(offsets[10]),
     role: _AuthenticatedUserDTOroleValueEnumMap[
-            reader.readByteOrNull(offsets[9])] ??
+            reader.readByteOrNull(offsets[11])] ??
         Role.customer,
-    token: reader.readString(offsets[10]),
-    userId: reader.readString(offsets[11]),
+    token: reader.readString(offsets[12]),
+    userId: reader.readString(offsets[13]),
   );
   return object;
 }
@@ -171,28 +197,32 @@ P _authenticatedUserDTODeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readDateTime(offset)) as P;
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
-      return (_AuthenticatedUserDTOgenderValueEnumMap[
-              reader.readByteOrNull(offset)] ??
-          Gender.male) as P;
+      return (reader.readDateTime(offset)) as P;
     case 7:
       return (reader.readString(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
-    case 9:
-      return (_AuthenticatedUserDTOroleValueEnumMap[
+      return (_AuthenticatedUserDTOgenderValueEnumMap[
               reader.readByteOrNull(offset)] ??
-          Role.customer) as P;
+          Gender.male) as P;
+    case 9:
+      return (reader.readString(offset)) as P;
     case 10:
       return (reader.readString(offset)) as P;
     case 11:
+      return (_AuthenticatedUserDTOroleValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          Role.customer) as P;
+    case 12:
+      return (reader.readString(offset)) as P;
+    case 13:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -586,6 +616,318 @@ extension AuthenticatedUserDTOQueryFilter on QueryBuilder<AuthenticatedUserDTO,
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'avatar',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'categoryId',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'categoryId',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'categoryId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'categoryId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'categoryId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'categoryId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'categoryId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'categoryId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+          QAfterFilterCondition>
+      categoryIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'categoryId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+          QAfterFilterCondition>
+      categoryIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'categoryId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'categoryId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> categoryIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'categoryId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'commissionId',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'commissionId',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'commissionId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'commissionId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'commissionId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'commissionId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'commissionId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'commissionId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+          QAfterFilterCondition>
+      commissionIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'commissionId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+          QAfterFilterCondition>
+      commissionIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'commissionId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'commissionId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO,
+      QAfterFilterCondition> commissionIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'commissionId',
         value: '',
       ));
     });
@@ -1737,6 +2079,34 @@ extension AuthenticatedUserDTOQuerySortBy
   }
 
   QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      sortByCategoryId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      sortByCategoryIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      sortByCommissionId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'commissionId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      sortByCommissionIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'commissionId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
       sortByDob() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dob', Sort.asc);
@@ -1904,6 +2274,34 @@ extension AuthenticatedUserDTOQuerySortThenBy
       thenByAvatarDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'avatar', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      thenByCategoryId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      thenByCategoryIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'categoryId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      thenByCommissionId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'commissionId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QAfterSortBy>
+      thenByCommissionIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'commissionId', Sort.desc);
     });
   }
 
@@ -2079,6 +2477,20 @@ extension AuthenticatedUserDTOQueryWhereDistinct
   }
 
   QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QDistinct>
+      distinctByCategoryId({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'categoryId', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QDistinct>
+      distinctByCommissionId({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'commissionId', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, AuthenticatedUserDTO, QDistinct>
       distinctByDob() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dob');
@@ -2168,6 +2580,20 @@ extension AuthenticatedUserDTOQueryProperty on QueryBuilder<
       avatarProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'avatar');
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, String?, QQueryOperations>
+      categoryIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'categoryId');
+    });
+  }
+
+  QueryBuilder<AuthenticatedUserDTO, String?, QQueryOperations>
+      commissionIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'commissionId');
     });
   }
 

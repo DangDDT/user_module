@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:user_module/core/core.dart';
 import 'package:user_module/core/utils/helpers/logger.dart';
+import 'package:user_module/src/domain/requests/patch_account_profile_body.dart';
 import 'package:user_module/src/domain/services/isar/daos/authenticated_user_dao.dart';
 import 'package:user_module/src/domain/services/isar/dtos/authenticated_user_dto.dart';
+import 'package:user_module/src/domain/services/user_service.dart';
 import 'package:user_module/src/presentation/controllers/auth_controller.dart';
+import 'package:user_module/src/presentation/widgets/gallery_picker.dart';
 
 import '../../../domain/domain.dart';
+import '../../../domain/services/file_service.dart';
 import '../../shared/toast.dart';
 
 class EditProfileController extends GetxController {
@@ -18,6 +24,8 @@ class EditProfileController extends GetxController {
   final AuthenticatedUserDAO _authDAO = Get.find<AuthenticatedUserDAO>(
     tag: AuthenticatedUserDAO.tag,
   );
+  final UserService _userService = Get.find<UserService>();
+  final FileService _fileService = Get.find<FileService>();
 
   AppUserModel? get currentUser => _authController.currentUser.value?.user;
 
@@ -29,6 +37,8 @@ class EditProfileController extends GetxController {
   ///States
   late final Rx<Gender> gender = Rx(currentUser?.gender ?? Gender.male);
   late final Rxn<DateTime> dob;
+  late final Rxn<File> updatingAvatar = Rxn<File>();
+  late final RxBool isUpdatingAvatar = false.obs;
   final RxBool isSaveLoading = false.obs;
 
   @override
@@ -44,6 +54,13 @@ class EditProfileController extends GetxController {
   void onChangeGender(Gender? value) {
     if (value == null) return;
     gender.value = value;
+  }
+
+  Future<void> onChangeAvatar() async {
+    final result = await GalleryManager.pickSingleImage();
+    if (result == null || result.file == null) return;
+    updatingAvatar.value = result.file;
+    isUpdatingAvatar.value = true;
   }
 
   Future<void> onChangeDOB() async {
@@ -69,17 +86,29 @@ class EditProfileController extends GetxController {
           ValidationExceptionKind.invalidInput,
         );
       }
-
+      String? updatedAvatar;
+      if (updatingAvatar.value != null) {
+        final avatarUrl = await _fileService.uploadFiles(
+          files: [updatingAvatar.value!],
+        );
+        if (avatarUrl.isEmpty) {
+          throw Exception(
+            'Có lỗi xảy ra khi tải ảnh lên, vui lòng thử lại!',
+          );
+        }
+        updatedAvatar = avatarUrl.first.link;
+      }
       final AppUserModel updatedUser = AppUserModel(
         id: currentUser!.id,
         fullName: fullNameController.text,
         phoneNumber: phoneNumberController.text.toPhoneNumberStringFromFormat(),
         email: currentUser!.email,
-        avatar: currentUser!.avatar,
+        avatar: updatedAvatar ?? currentUser!.avatar,
         gender: gender.value,
         dob: dob.value!,
         address: addressController.text,
         role: currentUser!.role,
+        extraData: currentUser!.extraData,
       );
       await _callUpdateProfileApi.call(updatedUser);
       await _saveNewProfileToLocal.call(currentAuthUser, updatedUser);
@@ -103,9 +132,28 @@ class EditProfileController extends GetxController {
     isSaveLoading.value = false;
   }
 
-  Future<void> _callUpdateProfileApi(AppUserModel appUser) async {
-    //TODO: Call api update profile
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> _callUpdateProfileApi(AppUserModel updatedUser) async {
+    try {
+      final result = await _userService.updateUserInfo(
+        body: PatchAccountProfileBody(
+          fullname: updatedUser.fullName,
+          gender: updatedUser.gender.toStringKey(),
+          phone: updatedUser.phoneNumber,
+          dateOfBirth: updatedUser.dob,
+          address: updatedUser.address,
+          imageUrl: updatedUser.avatar,
+        ),
+      );
+      if (result) {
+        return;
+      } else {
+        throw Exception(
+          'EditProfileController - _callUpdateProfileApi -> result is false',
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> _saveNewProfileToLocal(

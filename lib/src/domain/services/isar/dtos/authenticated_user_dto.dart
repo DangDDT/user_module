@@ -27,6 +27,10 @@ class AuthenticatedUserDTO {
   final String refreshToken;
   final DateTime expiredAt;
 
+  ///Extends
+  final String? categoryId;
+  final String? commissionId;
+
   AuthenticatedUserDTO({
     required this.userId,
     required this.fullName,
@@ -40,6 +44,8 @@ class AuthenticatedUserDTO {
     required this.token,
     required this.refreshToken,
     required this.expiredAt,
+    this.categoryId,
+    this.commissionId,
   });
 
   factory AuthenticatedUserDTO.fromAuthUser(AuthenticatedUser? appUser) {
@@ -62,6 +68,8 @@ class AuthenticatedUserDTO {
       token: appUser.token,
       refreshToken: appUser.refreshToken,
       expiredAt: appUser.expiredAt,
+      categoryId: appUser.user.extraData['categoryId'],
+      commissionId: appUser.user.extraData['commissionId'],
     );
   }
 
@@ -80,6 +88,10 @@ class AuthenticatedUserDTO {
         gender: gender,
         dob: dob,
         role: role,
+        extraData: {
+          'categoryId': categoryId,
+          'commissionId': commissionId,
+        },
       ),
     );
   }

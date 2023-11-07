@@ -2,6 +2,7 @@ name: user_module
 description: A new Flutter package project.
 version: 0.0.1
 homepage:
+publish_to: none
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -28,6 +29,9 @@ dependencies:
   dio: ^5.3.2
   shimmer: ^3.0.0
   extended_image: ^8.0.2
+
+  core_picker:
+    path: ../picker_package
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -39,6 +43,8 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+dependency_overrides:
+  http: ^0.13.5
 
 # The following section is specific to Flutter packages.
 flutter:

@@ -27,11 +27,7 @@ class LoginController extends GetxController {
     try {
       final user = await callLoginApi();
       if (user == null) {
-        throw ValidationException(
-          ValidationExceptionKind.invalidOutput,
-          message: 'Không tìm thấy tài khoản của người dùng trong hệ thống',
-          advice: 'Vui lòng liên hệ với quản trị viên để được hỗ trợ',
-        );
+        return;
       }
       await _authController.login(user);
       await _onLoginSuccess();
@@ -104,16 +100,7 @@ class LoginController extends GetxController {
         );
       }
       return user;
-    } catch (e) {
-      Logger.log(
-        e.toString(),
-        name: 'LoginController - callLoginApi',
-      );
-      Toast.showError(
-        title: 'Đăng nhập thất bại',
-        message: 'Vui lòng kiểm tra lại thông tin đăng nhập',
-      );
-    }
+    } catch (_) {}
     return null;
   }
 

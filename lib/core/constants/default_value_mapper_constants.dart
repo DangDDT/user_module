@@ -14,4 +14,6 @@ class DefaultValueMapperConstants {
   static const String defaultColorStringValue = '#808080';
 
   static const double defaultDoubleValue = -1.0;
+
+  static DateTime defaultDateTimeValue = DateTime(1900, 1, 1);
 }

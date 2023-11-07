@@ -1,22 +1,18 @@
 import 'dart:math';
 
-import 'package:intl/intl.dart';
-
 part 'string_ext_2.dart';
 
 extension StringX on String {
   String get initialWords {
-    List<String> names = split(' ');
-    String initials = '';
-
-    int nameLength = names.length;
-    if (nameLength > 1) {
-      initials += names[nameLength - 2][0];
-      initials += names[nameLength - 1][0];
-    } else {
-      initials += names[nameLength - 1][0];
+    try {
+      final words = split(' ');
+      if (words.length == 1) {
+        return words[0][0].toUpperCase();
+      }
+      return '${words[0][0]}${words[words.length - 1][0]}'.toUpperCase();
+    } catch (e) {
+      return '';
     }
-    return initials;
   }
 
   String removeDiacritics() {
@@ -80,6 +76,19 @@ extension StringX on String {
       result.add(text.substring(start, end));
     }
     return result;
+  }
+
+  String toPascalCase() {
+    return toLowerCase().split(' ').map((word) {
+      if (word.isEmpty) return word;
+      return '${word[0].toUpperCase()}${word.substring(1)}';
+    }).join(' ');
+  }
+
+  ///Example: đang cung cấp -> Đang cung cấp
+  String toUpperCaseFirstWord() {
+    if (isEmpty) return this;
+    return '${this[0].toUpperCase()}${substring(1)}';
   }
 }
 

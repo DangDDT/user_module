@@ -21,6 +21,5 @@ export 'models/base/result_response.dart';
 
 export 'models/models.dart';
 export 'requests/_sample_request.dart';
-export 'requests/requests.dart';
 
 export 'services/sample_service.dart';
