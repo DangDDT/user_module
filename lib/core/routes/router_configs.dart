@@ -2,6 +2,8 @@
 
 import 'package:get/get.dart';
 import 'package:user_module/core/core.dart';
+import 'package:user_module/src/presentation/controllers/auth_controller.dart';
+import 'package:user_module/src/presentation/controllers/auth_page.dart';
 import 'package:user_module/src/presentation/pages/edit_profile/edit_profile_controller.dart';
 import 'package:user_module/src/presentation/pages/edit_profile/edit_profile_page.dart';
 import 'package:user_module/src/presentation/pages/login/login_page.dart';
@@ -20,7 +22,13 @@ class ModuleRouter {
     //     ...
     //   }),
     // ),
-
+    GetPage<dynamic>(
+      name: RouteConstants.authRoute,
+      page: () => const UserAuthPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => AuthController());
+      }),
+    ),
     GetPage(
       name: RouteConstants.loginRoute,
       page: () => const LoginPage(),

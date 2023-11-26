@@ -11,6 +11,8 @@
 class RouteConstants {
   const RouteConstants._();
 
+  static const String authRoute = '/auth';
+
   static const String loginRoute = '/login';
 
   static const String editProfileRoute = '/edit-profile';
