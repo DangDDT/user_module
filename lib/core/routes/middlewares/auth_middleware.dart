@@ -28,7 +28,9 @@ class AuthMiddleware extends GetMiddleware {
     ].contains(route);
 
     if (!isAuthRoutes && !isAuthenticated) {
-      return const RouteSettings(name: RouteConstants.loginRoute);
+      return RouteSettings(name: RouteConstants.authRoute, arguments: {
+        RedirectArgumentKeys.redirectRoute: route,
+      });
     }
     return null;
   }
