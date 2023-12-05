@@ -106,7 +106,7 @@ class LoginController extends GetxController {
 
   Future<void> _onLoginSuccess() async {
     if (_authController.authState.value.isAuthenticated) {
-      Get.offNamed(_moduleConfig.homeRoute);
+      Get.offNamed(RouteConstants.authRoute);
     } else {
       Get.offAllNamed(RouteConstants.loginRoute);
     }

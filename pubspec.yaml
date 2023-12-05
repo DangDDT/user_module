@@ -34,6 +34,7 @@ dependencies:
     git:
       url: https://github.com/DangDDT/picker_package.git
       ref: main
+  lottie: ^2.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -53,6 +54,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/animations/
 
 assets_gen:
   output: core/gens/assets.dart

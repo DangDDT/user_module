@@ -18,8 +18,12 @@ class UserAuthPage extends GetView<AuthController> {
     // };
     return const Scaffold(
       body: Center(
-        child: LoadingWidget(
-          message: 'Đang đăng nhập...',
+        child: Column(
+          children: [
+            LoadingWidget(
+              message: 'Đang đăng nhập',
+            ),
+          ],
         ),
       ),
     );

@@ -5,9 +5,14 @@ import 'package:user_module/src/presentation/shared/circle_avatar_with_error_han
 import 'package:user_module/src/presentation/shared/unauthenticated_widget.dart';
 import 'package:user_module/src/presentation/widgets/responsive_width.dart';
 
-class UserProfileView extends StatelessWidget {
+class UserProfileView extends StatefulWidget {
   const UserProfileView({Key? key}) : super(key: key);
 
+  @override
+  State<UserProfileView> createState() => _UserProfileViewState();
+}
+
+class _UserProfileViewState extends State<UserProfileView> {
   @override
   Widget build(BuildContext context) {
     return AuthViewBuilderWrapper(

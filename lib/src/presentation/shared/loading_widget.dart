@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:user_module/src/presentation/shared/shared.dart';
 
 import '../../../core/core.dart';
 import 'fade_scale_transition_wrapper.dart';
@@ -12,14 +14,19 @@ class LoadingWidget extends StatelessWidget {
     return FadeScaleTransitionWrapper(
       duration: const Duration(milliseconds: 610),
       child: SizedBox(
-        height: 300,
         child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 100),
-              CircularProgressIndicator(color: kTheme.colorScheme.primary),
+              const SizedBox(height: 300),
+              LottieBuilder.asset(
+                Assets.user_module$assets_animations_login_loading_json,
+                width: 200,
+              ),
               kGapH16,
-              Text(message),
+              LoadingText(
+                placeholder: message,
+              ),
             ],
           ),
         ),

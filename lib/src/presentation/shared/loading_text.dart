@@ -44,13 +44,9 @@ class _LoadingTextState extends State<LoadingText> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          widget.placeholder + currentText,
-          style: widget.style,
-        ),
-      ],
+    return Text(
+      widget.placeholder + currentText,
+      style: widget.style,
     );
   }
 }

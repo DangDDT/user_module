@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../core/core.dart';
 
@@ -16,12 +17,35 @@ class LogoAndAppNameWrapper extends StatelessWidget {
     return Column(
       children: [
         _Logo(logo: _moduleConfig.loginViewConfig?.logo),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _AppName(
-              appName: _moduleConfig.loginViewConfig?.appName ?? 'App Name'),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _AppName(
+                appName: _moduleConfig.loginViewConfig?.appName ?? 'App Name',
+              ),
+            ),
+            Positioned(
+              top: 25,
+              left: 0,
+              right: 0,
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  kTheme.colorScheme.primary,
+                  BlendMode.srcATop,
+                ),
+                child: LottieBuilder.asset(
+                  Assets.user_module$assets_animations_flower_animation_json,
+                  width: 300,
+                  reverse: true,
+                  repeat: true,
+                ),
+              ),
+            ),
+          ],
         ),
-        kGapH8,
+        kGapH24,
         ...children,
       ],
     );
