@@ -26,6 +26,7 @@ class GlobalBinding {
     required String homeRoute,
     LoginViewConfig? viewConfig,
     OnGetFirebaseToken? onGetFirebaseTokenCallback,
+    OnRefreshTokenCallback? onRefreshTokenCallback,
     MockConfig? mockConfig,
   }) async {
     Get.put<ModuleConfig>(
@@ -35,6 +36,7 @@ class GlobalBinding {
         loginViewConfig: viewConfig,
         homeRoute: homeRoute,
         onGetFirebaseToken: onGetFirebaseTokenCallback,
+        onRefreshTokenCallback: onRefreshTokenCallback,
         mockConfig: mockConfig,
       ),
       tag: ModuleConfig.tag,
