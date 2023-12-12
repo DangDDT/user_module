@@ -49,17 +49,17 @@ class AuthInterceptor implements Interceptor {
           if (token == null) return handler.next(error);
           final currentUser = _authController.currentUser.value;
           if (currentUser == null) return handler.next(error);
-          _localAuthRepository.updateAppUser(
+          await _localAuthRepository.updateAppUser(
             AuthenticatedUserDTO.fromAuthUser(
               currentUser.copyWith(token: token),
             ),
           );
           final authUserData = currentUser;
           if (authUserData == null) return handler.next(error);
-          final accessToken = _authController.accessToken;
+          // final accessToken = _authController.accessToken;
           final opts = Options(method: requestOptions.method);
           final dioClient = Dio();
-          dioClient.options.headers['Authorization'] = 'Bearer $accessToken';
+          dioClient.options.headers['Authorization'] = 'Bearer $token';
           dioClient.options.headers['Accept'] = '*/*';
           final response = await dioClient.request<dynamic>(
             requestOptions.path,
