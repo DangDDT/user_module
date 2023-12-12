@@ -1,5 +1,10 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as get_x_package;
+import 'package:user_module/core/module_configs.dart';
+import 'package:user_module/src/domain/services/isar/daos/authenticated_user_dao.dart';
+import 'package:user_module/src/domain/services/isar/dtos/authenticated_user_dto.dart';
 import 'package:user_module/src/presentation/controllers/auth_controller.dart';
 
 import '../utils/helpers/logger.dart';
@@ -8,11 +13,11 @@ class AuthInterceptor implements Interceptor {
   static final AuthController _authController =
       get_x_package.Get.find(tag: AuthController.tag);
 
-  // static final AuthenticatedUserDAO _localAuthRepository =
-  //     get_x_package.Get.find(tag: AuthenticatedUserDAO.tag);
+  static final AuthenticatedUserDAO _localAuthRepository =
+      get_x_package.Get.find(tag: AuthenticatedUserDAO.tag);
 
-  // static final ModuleConfig _config =
-  //     get_x_package.Get.find(tag: ModuleConfig.tag);
+  static final ModuleConfig _config =
+      get_x_package.Get.find(tag: ModuleConfig.tag);
 
   @override
   void onRequest(
@@ -20,16 +25,6 @@ class AuthInterceptor implements Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     try {
-      //TODO : Uncomment this code when use refresh token
-      // final currentUser = await _userLocalService.getCurrentLoggedUser();
-      // if (currentUser == null) return handler.next(options);
-
-      // final localAuthData =
-      //     await _localAuthRepository.getAuthData(userId: currentUser.userID);
-      // if (localAuthData == null) return handler.next(options);
-
-      // final accessToken = localAuthData.accessToken;
-      //TODO: Remove this code when use refresh token
       final accessToken = _authController.accessToken;
       options.headers['Authorization'] = 'Bearer $accessToken';
       options.headers['Accept'] = '*/*';
@@ -50,8 +45,17 @@ class AuthInterceptor implements Interceptor {
       if (error.response!.statusCode == 401) {
         try {
           final requestOptions = error.requestOptions;
-          // final authUserData = await refreshToken();
-          // if (authUserData == null) return handler.next(error);
+          final String? token = await _config.onRefreshTokenCallback?.call();
+          if (token == null) return handler.next(error);
+          final currentUser = _authController.currentUser.value;
+          if (currentUser == null) return handler.next(error);
+          _localAuthRepository.updateAppUser(
+            AuthenticatedUserDTO.fromAuthUser(
+              currentUser.copyWith(token: token),
+            ),
+          );
+          final authUserData = currentUser;
+          if (authUserData == null) return handler.next(error);
           final accessToken = _authController.accessToken;
           final opts = Options(method: requestOptions.method);
           final dioClient = Dio();

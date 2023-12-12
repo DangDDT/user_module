@@ -138,6 +138,20 @@ class AuthenticatedUser {
     required this.user,
   });
 
+  AuthenticatedUser copyWith({
+    String? token,
+    String? refreshToken,
+    DateTime? expiredAt,
+    AppUserModel? user,
+  }) {
+    return AuthenticatedUser(
+      token: token ?? this.token,
+      refreshToken: refreshToken ?? this.refreshToken,
+      expiredAt: expiredAt ?? this.expiredAt,
+      user: user ?? this.user,
+    );
+  }
+
   factory AuthenticatedUser.mock() {
     final faker = Faker();
     return AuthenticatedUser(

@@ -73,6 +73,29 @@ class AuthenticatedUserDTO {
     );
   }
 
+  AuthenticatedUser copyWithToken(String newToken) {
+    return AuthenticatedUser(
+      token: newToken,
+      refreshToken: refreshToken,
+      expiredAt: expiredAt,
+      user: AppUserModel(
+        id: userId,
+        fullName: fullName,
+        phoneNumber: phoneNumber,
+        email: email,
+        address: address,
+        avatar: avatar,
+        gender: gender,
+        dob: dob,
+        role: role,
+        extraData: {
+          'categoryId': categoryId,
+          'commissionId': commissionId,
+        },
+      ),
+    );
+  }
+
   AuthenticatedUser toAuthUser() {
     return AuthenticatedUser(
       token: token,

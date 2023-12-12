@@ -13,6 +13,7 @@ class ModuleConfig {
     this.loginViewConfig,
     required this.homeRoute,
     this.onGetFirebaseToken,
+    this.onRefreshTokenCallback,
   })
   // :
   // _userConfig = null,
@@ -28,6 +29,8 @@ class ModuleConfig {
   final LoginViewConfig? loginViewConfig;
 
   final OnGetFirebaseToken? onGetFirebaseToken;
+
+  final OnRefreshTokenCallback? onRefreshTokenCallback;
 
   // UserConfig? _userConfig;
 
@@ -108,10 +111,10 @@ class AuthConfig {
   final OnGetFirebaseToken accessToken;
 
   /// [onRefreshTokenCallback] là callback được gọi khi có lỗi xảy ra với api
-  // final OnRefreshTokenCallback onRefreshTokenCallback;
+  final OnRefreshTokenCallback onRefreshTokenCallback;
   AuthConfig({
     required this.accessToken,
-    // required this.onRefreshTokenCallback,
+    required this.onRefreshTokenCallback,
   });
 }
 
