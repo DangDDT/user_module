@@ -107,7 +107,7 @@ class AuthController extends GetxController with AuthListenerMixins {
       Get.offAllNamed(RouteConstants.loginRoute);
     } else {
       _authState.value = AuthenticatedState(authUser);
-      Future.delayed(const Duration(milliseconds: 4500), () {
+      Future.delayed(const Duration(milliseconds: 1000), () {
         Get.offAllNamed(_moduleConfig.homeRoute);
       });
     }
